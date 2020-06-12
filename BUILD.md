@@ -12,7 +12,14 @@ The assembly provides 2 containers, ubuntu for assembly and nginx for the web se
 ```bash
 mkdir build && cd build
 cmake ..
-make
+make -j$(nproc)
+```
+
+***Wasm build***
+```bash
+mkdir build && cd build
+cmake -DBUILD_TYPE=webassembly -DCMAKE_BUILD_TYPE=Release .. 
+make -j$(nproc)
 ```
 
 ***Wasm build in container***
@@ -32,5 +39,5 @@ chmod +x game.sh
 ./game.sh --test                # Run tests
 ./game.sh -o ubuntu bash [cmd]  # Execute an arbitrary command in the container
 ./game.sh -d                    # To stop containers
-./game.sh --help                # to get help
+./game.sh --help                # To get help
 ```
