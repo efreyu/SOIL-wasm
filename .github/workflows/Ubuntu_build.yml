@@ -1,4 +1,4 @@
-name: Webassembly build
+name: Linux build
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
       - '*.md'
       - '.gitignore'
       - 'docker/**'
-      - 'Ubuntu_build.yml'
+      - 'Wasm_build.yml'
   pull_request:
     paths-ignore:
       - 'docs/**'
       - '*.md'
       - '.gitignore'
       - 'docker/**'
-      - 'Ubuntu_build.yml'
+      - 'Wasm_build.yml'
 
 jobs:
 
@@ -30,10 +30,6 @@ jobs:
       AUTO_CACHING: "1"
 
     steps:
-      - uses: mymindstorm/setup-emsdk@v4
-
-      - name: Verify Emscripten
-        run: emcc -v
 
       - name: Get repository name.
         run: echo ::set-env name=REPO_NAME::${GITHUB_REPOSITORY##*/}
@@ -57,11 +53,11 @@ jobs:
       - name: First set up. ☕️
         shell: bash
         run: |
-          emcc -v > CACHE_KEY.txt
+          g++ -v > CACHE_KEY.txt
           echo $MANUAL_CACHING >> CACHE_KEY.txt
           if [ "$AUTO_CACHING" == "1" ]; then
-          thisFile=$REPO_NAME/.github/workflows/webassembly.yml
-          echo `md5sum $thisFile | cut -c -32` >> CACHE_KEY.txt
+            thisFile=$REPO_NAME/.github/workflows/ubuntu-desktop.yml
+            echo `md5sum $thisFile | cut -c -32` >> CACHE_KEY.txt
           fi
           md5cache=$(md5sum CACHE_KEY.txt | cut -c -32)
           echo ::set-env name=CACHE_KEY::$md5cache
@@ -79,8 +75,8 @@ jobs:
           rm $file
           cmake --version
 
-      - name: Build wasm. 🔧
+      - name: Build. 🔧
         shell: bash
         run: |
           mkdir build && cd build \
-          && cmake -DBUILD_TYPE=webassembly -DCMAKE_BUILD_TYPE=Release .. && make -j$(nproc)
+          && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j$(nproc)
