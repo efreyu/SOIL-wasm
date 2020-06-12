@@ -1,1 +1,15 @@
+#IDEA temp folders
+.vc
+.idea
+
+#Other files
+*.sql
+*.bk
+*.DS_Store
 /*.bc
+
+#Temp build folders
+build
+cmake-build-*
+#temp folder for nginx
+public
